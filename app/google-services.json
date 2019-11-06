@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "706744673951",
+    "firebase_url": "https://nevermiss-6099d.firebaseio.com",
+    "project_id": "nevermiss-6099d",
+    "storage_bucket": "nevermiss-6099d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706744673951:android:9dbd9b8bc57ca5f96264aa",
+        "android_client_info": {
+          "package_name": "com.waleed.nevermiss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706744673951-7c7r1fo9r2tlud9qi39nc4n0rblfp048.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.waleed.nevermiss",
+            "certificate_hash": "79f7d38af1b26e3aa922ab7f6839185c060c6892"
+          }
+        },
+        {
+          "client_id": "706744673951-7vgft76p14os96nd5faf689n6dnkudp7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEe_T4WbBmYS7bCemLnaV1oCZI_uHecZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706744673951-7vgft76p14os96nd5faf689n6dnkudp7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

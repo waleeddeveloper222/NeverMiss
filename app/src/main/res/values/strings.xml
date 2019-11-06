@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">NeverMiss</string>
+
+    <!-- Strings related to sign -->
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_user_name">Use Name</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_re_password">Renter Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="forgot_password">Forgot Your Password ?</string>
+    <string name="send_email">Send Email</string>
+    <string name="send_vaild_email">Write a valid Email to send you a new password</string>
+    <string name="signin">Sign In</string>
+    <string name="change_password">Change Password  </string>
+    <string name="enter_password">Enter your new password</string>
+
+    <string name="register_txt">Don\'t have account ? ,Register</string>
+    <string name="login_txt">Already have account?,Login</string>
+
+
+
+</resources>
