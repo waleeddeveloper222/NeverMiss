@@ -13,7 +13,7 @@ import com.waleed.nevermiss.utils.Validate
 import com.waleed.nevermiss.viewModel.SignViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var signViewModel: SignViewModel
 
@@ -24,55 +24,51 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         signViewModel = ViewModelProviders.of(this, SignViewModelFactory(this@LoginActivity))
             .get(SignViewModel::class.java!!)
 
-    }
+        registerTextView.setOnClickListener {
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+        }
 
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.registerTextView -> {
-                val registerIntent = Intent(this@LoginActivity, RegisterActivity::class.java)
-                startActivity(registerIntent)
-            }
-            R.id.forgotTextView -> {
-                val forgotIntent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
-                startActivity(forgotIntent)
-            }
+        forgotTextView.setOnClickListener {
+            startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
+        }
 
-            R.id.loginButton ->
 
-                //     startActivity(new Intent(this, MainActivity.class));
+        loginButton.setOnClickListener {
+            //     startActivity(new Intent(this, MainActivity.class));
 
-                if (Validate.isTextNotEmpty(textInputLayout_email.editText!!.text.toString())) {
+            if (Validate.isTextNotEmpty(textInputLayout_email.editText!!.text.toString())) {
+
+                removerError()
+
+                if (Validate.isTextNotEmpty(textInputLayout_password.editText!!.text.toString())) {
 
                     removerError()
 
-                    if (Validate.isTextNotEmpty(textInputLayout_password.editText!!.text.toString())) {
+                    if (Validate.isValidEmail(textInputLayout_email.editText!!.text.toString())) {
 
                         removerError()
 
-                        if (Validate.isValidEmail(textInputLayout_email.editText!!.text.toString())) {
-
-                            removerError()
-
-                            progressBar.visibility = View.VISIBLE
-                            loginButton.visibility = View.INVISIBLE
-                            signViewModel.login(
-                                textInputLayout_email.editText!!.text.toString(),
-                                textInputLayout_password.editText!!.text.toString()
-                            )
-                        } else {
-                            textInputLayout_email.isErrorEnabled = true
-                            textInputLayout_email.error = "Email is not Valid! "
-                        }
-
+                        progressBar.visibility = View.VISIBLE
+                        loginButton.visibility = View.INVISIBLE
+                        signViewModel.login(
+                            textInputLayout_email.editText!!.text.toString(),
+                            textInputLayout_password.editText!!.text.toString()
+                        )
                     } else {
-                        textInputLayout_password.isErrorEnabled = true
-                        textInputLayout_password.error = "Password can not be Empty! "
+                        textInputLayout_email.isErrorEnabled = true
+                        textInputLayout_email.error = "Email is not Valid! "
                     }
+
                 } else {
-                    textInputLayout_email.isErrorEnabled = true
-                    textInputLayout_email.error = "Email can not be Empty! "
+                    textInputLayout_password.isErrorEnabled = true
+                    textInputLayout_password.error = "Password can not be Empty! "
                 }
+            } else {
+                textInputLayout_email.isErrorEnabled = true
+                textInputLayout_email.error = "Email can not be Empty! "
+            }
         }
+
     }
 
 
