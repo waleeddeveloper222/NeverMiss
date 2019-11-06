@@ -18,7 +18,9 @@
 
     <string name="register_txt">Don\'t have account ? ,Register</string>
     <string name="login_txt">Already have account?,Login</string>
-
+    <string name="title_activity_main">MainActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 
 </resources>

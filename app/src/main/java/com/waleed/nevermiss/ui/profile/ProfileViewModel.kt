@@ -21,40 +21,40 @@ class ProfileViewModel : ViewModel {
 //        this.profileFragment = profileFragment
 //    }
 
-    fun updateUserName(username: String) {
-
-        if (Validate.isNetworkAvailable(profileFragment.getContext())) {
-            fireBaseRepo.updateUsername(username)
-        } else {
-            netWorkError()
-        }
-    }
+//    fun updateUserName(username: String) {
+//
+//        if (Validate.isNetworkAvailable(profileFragment.getContext())) {
+//            fireBaseRepo.updateUsername(username)
+//        } else {
+//            netWorkError()
+//        }
+//    }
 
 
     fun updateEmail(email: String) {
 
-        if (Validate.isNetworkAvailable(profileFragment.getContext())) {
-            fireBaseRepo.updateEmail(email)
-        } else {
-            netWorkError()
-        }
+//        if (Validate.isNetworkAvailable(profileFragment.getContext())) {
+//            fireBaseRepo.updateEmail(email)
+//        } else {
+//            netWorkError()
+//        }
     }
 
     fun updatePassword(password: String) {
-        if (Validate.isNetworkAvailable(profileFragment.getContext())) {
-            fireBaseRepo.updatePassword(password)
-        } else {
-            netWorkError()
-        }
+//        if (Validate.isNetworkAvailable(profileFragment.getContext())) {
+//            fireBaseRepo.updatePassword(password)
+//        } else {
+//            netWorkError()
+//        }
     }
 
     fun sendMessage(message: String) {
-        profileFragment.showMessage(message)
+      //  profileFragment.showMessage(message)
     }
 
 
     private fun netWorkError() {
-        profileFragment.showMessage("Network Error, Check your Internet Connection")
+       // profileFragment.showMessage("Network Error, Check your Internet Connection")
     }
 
 }
