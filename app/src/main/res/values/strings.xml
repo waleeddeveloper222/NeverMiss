@@ -19,8 +19,17 @@
     <string name="register_txt">Don\'t have account ? ,Register</string>
     <string name="login_txt">Already have account?,Login</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="title_activity_send_message">SendMessageActivity</string>
+    <string name="title_activity_contact">Add Contacts</string>
+    <string name="title_activity_add_group">AddGroupActivity</string>
+    <string name="hint_group_name">Name</string>
+    <string name="people">People</string>
+    <string name="msg_sent">Message sent</string>
+    <string name="status_sent">Completed</string>
+    <string name="type_sms">Sent</string>
+    <string name="msg_generic_failure">GENERIC FAILURE</string>
+    <string name="msg_no_service">NO SERVICE</string>
+    <string name="msg_null_pdu">NULL PDU</string>
 
 
 </resources>

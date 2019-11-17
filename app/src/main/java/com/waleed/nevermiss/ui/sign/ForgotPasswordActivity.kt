@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.waleed.nevermiss.R
 import com.waleed.nevermiss.utils.Validate
-import com.waleed.nevermiss.viewModel.SignViewModel
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 
 class ForgotPasswordActivity : AppCompatActivity() {

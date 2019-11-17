@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.waleed.nevermiss.R
 import com.waleed.nevermiss.utils.Validate
-import com.waleed.nevermiss.viewModel.SignViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -50,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
 
                         progressBar.visibility = View.VISIBLE
                         loginButton.visibility = View.INVISIBLE
+
                         signViewModel.login(
                             textInputLayout_email.editText!!.text.toString(),
                             textInputLayout_password.editText!!.text.toString()
@@ -94,9 +94,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    internal inner class SignViewModelFactory(private val loginActivity: LoginActivity) :
-        ViewModelProvider.Factory {
-
+     inner class SignViewModelFactory(private val loginActivity: LoginActivity) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return SignViewModel(loginActivity) as T

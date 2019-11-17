@@ -1,22 +1,19 @@
-package com.waleed.nevermiss.viewModel
+package com.waleed.nevermiss.ui.sign
 
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.waleed.nevermiss.Repo.FireBaseRepo
-import com.waleed.nevermiss.ui.MainActivity
-import com.waleed.nevermiss.ui.sign.ForgotPasswordActivity
-import com.waleed.nevermiss.ui.sign.LoginActivity
-import com.waleed.nevermiss.ui.sign.RegisterActivity
+import com.waleed.nevermiss.ui.main.MainActivity
 import com.waleed.nevermiss.utils.Validate
 
 
 class SignViewModel : ViewModel {
 
-    internal var fireBaseRepo: FireBaseRepo
-    internal var loginActivity: LoginActivity? = null
-    internal var registerActivity: RegisterActivity? = null
-    internal var passwordActivity: ForgotPasswordActivity? = null
+    lateinit var fireBaseRepo: FireBaseRepo
+    lateinit var loginActivity: LoginActivity
+    lateinit var registerActivity: RegisterActivity
+    lateinit var passwordActivity: ForgotPasswordActivity
 //    internal var logoutFragment: LogoutFragment? = null
 
 
@@ -34,7 +31,7 @@ class SignViewModel : ViewModel {
         fireBaseRepo = FireBaseRepo(this)
         this.passwordActivity = passwordActivity
     }
-//
+
 //    constructor(logoutFragment: LogoutFragment) {
 //        fireBaseRepo = FireBaseRepo(this)
 //        this.logoutFragment = logoutFragment
@@ -79,6 +76,7 @@ class SignViewModel : ViewModel {
         if (loginActivity != null) {
 
             loginActivity!!.showMessage("Login successfully")
+
             loginActivity!!.startActivity(Intent(loginActivity, MainActivity::class.java))
             loginActivity!!.finish()
 

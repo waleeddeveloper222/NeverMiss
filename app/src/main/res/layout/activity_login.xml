@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".ui.sign.LoginActivity">
 
 
@@ -65,8 +66,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@color/colorWhite"
         android:text="@string/login"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout_password"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout_password"
         app:layout_constraintTop_toBottomOf="@+id/forgotTextView" />
@@ -79,7 +81,7 @@
         android:gravity="center"
         android:padding="2dp"
         android:text="@string/register_txt"
-        android:textColor="@color/colorHome"
+        android:textColor="@color/colorWhite"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/loginButton"
         app:layout_constraintStart_toStartOf="@+id/loginButton"

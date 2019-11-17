@@ -4,8 +4,8 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.waleed.nevermiss.model.User
-import com.waleed.nevermiss.ui.profile.ProfileViewModel
-import com.waleed.nevermiss.viewModel.SignViewModel
+import com.waleed.nevermiss.ui.fragment.profile.ProfileViewModel
+import com.waleed.nevermiss.ui.sign.SignViewModel
 
 
 class FireBaseRepo {
@@ -52,10 +52,10 @@ class FireBaseRepo {
                 Log.d(TAG, "firebaseUser:uid =  $uid")
                 Log.d(TAG, "firebaseUser:name =  " + name!!)
                 Log.d(TAG, "firebaseUser:email =  " + email!!)
-                Log.d(TAG, "firebaseUser:photoUrl =  " + photoUrl!!)
+                //  Log.d(TAG, "firebaseUser:photoUrl =  " + photoUrl!!)
 
 
-                user = User(uid, email, name, photoUrl)
+                user = User(uid, email, name)
             }
 
             return user
@@ -85,12 +85,13 @@ class FireBaseRepo {
                         // String uid = firebaseUser.getUid();
 
                     }
+
                     Log.d(TAG, "signInWithEmail:success")
                     signViewModel!!.sendMessage()
 
 
                 } else {
-                    // If sign in fails, display a message to the user.
+                    // If sign in fails, display a myMessage to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     //updateUI(null);
 
@@ -129,7 +130,7 @@ class FireBaseRepo {
 
                     updateUsername(userName)
                 } else {
-                    // If sign in fails, display a message to the user.
+                    // If sign in fails, display a myMessage to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     // updateUI(null);
                     task.exception!!.message?.let { signViewModel!!.sendError(it) }
