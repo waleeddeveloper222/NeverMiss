@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import com.waleed.nevermiss.model.Groups
 import com.waleed.nevermiss.model.MyMessage
 import com.waleed.nevermiss.ui.fragment.group.GroupViewModel
+import com.waleed.nevermiss.ui.fragment.history.HistoryViewModel
+import com.waleed.nevermiss.ui.fragment.message.MessageViewModel
 import com.waleed.nevermiss.ui.sendMessage.SendMessageViewModel
 import com.waleed.nevermiss.utils.Utils
 
@@ -15,7 +17,8 @@ class DataBaseRepo {
     private var context: Context? = null
     lateinit var groupViewModel: GroupViewModel
     lateinit var sendMessageViewModel: SendMessageViewModel
-
+    lateinit var messageViewModel: MessageViewModel
+    lateinit var historyViewModel: HistoryViewModel
 
     val db: RoomDAO get() = NeverMissDataBase.getDatabase(context!!).RoomDao()
 
@@ -130,6 +133,17 @@ class DataBaseRepo {
         this.sendMessageViewModel = sendMessageViewModel
     }
 
+
+    constructor(context: Context, messageViewModel: MessageViewModel) {
+        this.context = context
+        this.messageViewModel = messageViewModel
+    }
+
+    constructor(context: Context, historyViewModel: HistoryViewModel) {
+        this.context = context
+        this.historyViewModel = historyViewModel
+    }
+
     constructor(context: Context) {
         this.context = context
     }
@@ -140,7 +154,7 @@ class DataBaseRepo {
         class GetTrip : AsyncTask<String, Void, MyMessage>() {
 
             protected override fun doInBackground(vararg longs: String): MyMessage {
-                return db.getMessage(id, com.waleed.nevermiss.utils.Utils.getCurrentUser())
+                return db.getMessage(id, Utils.getCurrentUser())
             }
 
             override fun onPostExecute(myMessage: MyMessage) {
@@ -216,7 +230,7 @@ class DataBaseRepo {
 
     fun deleteMessage(myMessage: MyMessage) {
 
-        class DeleteTrip : AsyncTask<MyMessage, Void, Void>() {
+        class DeleteMessage : AsyncTask<MyMessage, Void, Void>() {
 
             override fun doInBackground(vararg myMessages: MyMessage): Void? {
                 db.deleteMessage(myMessage)
@@ -228,16 +242,17 @@ class DataBaseRepo {
             }
         }
 
-        DeleteTrip().execute()
+        DeleteMessage().execute(myMessage)
 
     }
 
-    fun getMessages(mutableLiveData: MutableLiveData<List<MyMessage>>, state: String) {
+    fun getMessages(mutableLiveData: MutableLiveData<List<MyMessage>>) {
 
         class GetTrips : AsyncTask<Void, Void, List<MyMessage>>() {
 
             override fun doInBackground(vararg avoid: Void): List<MyMessage> {
-                return db.getUserMessages(Utils.getCurrentUser(), state)
+                return db.getUserMessages(Utils.getCurrentUser(), "pending")
+                //return db.getUserAllMessages(Utils.getCurrentUser())
             }
 
             override fun onPostExecute(myMessages: List<MyMessage>) {

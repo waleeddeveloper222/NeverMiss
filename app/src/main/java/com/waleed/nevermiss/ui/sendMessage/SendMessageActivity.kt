@@ -62,13 +62,14 @@ class SendMessageActivity : AppCompatActivity() {
                 .get(SendMessageViewModel::class.java!!)
 
         myMessage = MyMessage()
+
         val gridLayoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
         contactsRecyclerView.layoutManager = gridLayoutManager
         sendMessageAdapter = SendMessageAdapter()
         contactsRecyclerView.adapter = sendMessageAdapter
 
 
-        texViewContacts.setOnClickListener {
+        contactLayout.setOnClickListener {
             var getContactsIntent = Intent(this, ContactsActivity::class.java)
             startActivityForResult(getContactsIntent, INTENT_REQUEST)
         }
@@ -85,10 +86,6 @@ class SendMessageActivity : AppCompatActivity() {
                 myMessage.smsType = "sms"
                 sendMessageViewModel.saveMessage(myMessage)
             }
-
-
-            //Utils.sendTextMsgOnWhatsApp("01016968592", "Hi Hossam", this)
-
         }
 
     }
@@ -210,7 +207,7 @@ class SendMessageActivity : AppCompatActivity() {
 
         val datePickerDialog = DatePickerDialog(
             this,
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 textViewDate.text = dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
             }, mYear, mMonth, mDay
         )
@@ -240,10 +237,11 @@ class SendMessageActivity : AppCompatActivity() {
     private fun isContacts(): Boolean {
 
         return if (cList.isEmpty()) {
-            texViewContacts.error = "Select People"
+//            texViewContacts.error = "Select People"
+            Toast.makeText(this, "Select People", Toast.LENGTH_SHORT).show()
             false
         } else {
-            texViewContacts.error = null
+//            texViewContacts.error = null
             myMessage.contacts = cList
             true
         }

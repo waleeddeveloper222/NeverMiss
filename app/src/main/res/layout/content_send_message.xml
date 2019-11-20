@@ -9,33 +9,35 @@
     tools:showIn="@layout/activity_send_message">
 
 
-    <TextView
-        android:id="@+id/texViewContacts"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/contactLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/border"
-        android:drawableStart="@drawable/ic_people"
-        android:drawablePadding="5dp"
-        android:padding="5dp"
-        android:text="@string/people"
-        android:textColor="@color/colorPrimary"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/contactsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/texViewContacts" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_user" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/contactsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/textViewDate"
@@ -48,11 +50,11 @@
         android:drawableStart="@drawable/ic_date"
         android:drawablePadding="5dp"
         android:hint="Date"
-        android:padding="5dp"
+        android:padding="8dp"
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contactsRecyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/contactLayout" />
 
 
     <TextView
@@ -66,7 +68,7 @@
         android:drawableStart="@drawable/ic_time"
         android:drawablePadding="5dp"
         android:hint="Time"
-        android:padding="5dp"
+        android:padding="8dp"
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +82,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:hint="myMessage"
+        android:hint="Message"
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +91,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:textColor="@color/colorPrimary" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,6 +108,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout_message"
         app:srcCompat="@android:drawable/ic_menu_send" />
+
+    <TextView
+        android:id="@+id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/ic_sim_card"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/sendMessageButton"
+        app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"
+        app:layout_constraintTop_toTopOf="@+id/sendMessageButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

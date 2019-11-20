@@ -7,17 +7,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 import com.waleed.nevermiss.R
+import com.waleed.nevermiss.model.MyMessage
 import com.waleed.nevermiss.ui.sendMessage.SendMessageActivity
-import kotlinx.android.synthetic.main.message_fragment.*
+import com.waleed.nevermiss.utils.Utils
 
 class MessageFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MessageFragment()
-    }
+    lateinit var messageAdapter: MessageAdapter
+    lateinit var layoutManager: RecyclerView.LayoutManager
+    lateinit var messageViewModel: MessageViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -44,9 +50,47 @@ class MessageFragment : Fragment() {
             )
         }
 
+        var pending_message_recycler =
+            view.findViewById<RecyclerView>(R.id.pending_message_recycler)
+
+        messageViewModel =
+            ViewModelProviders.of(this, MessageViewModelFactory(this))
+                .get(MessageViewModel::class.java)
+
+        layoutManager = LinearLayoutManager(activity)
+        messageAdapter = MessageAdapter(this)
+        pending_message_recycler.layoutManager = layoutManager
+        pending_message_recycler.adapter = messageAdapter
 
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateRecyclerView()
+    }
+
+    fun updateRecyclerView() {
+
+        messageViewModel.getUserMessage().observe(this,
+            Observer<List<MyMessage>> { myMessages ->
+                messageAdapter.setMessageList(myMessages)
+            })
+    }
+
+    fun deleteGroup(myMessage: MyMessage) {
+        messageViewModel.deleteMessage(myMessage)
+
+    }
+
+    inner class MessageViewModelFactory(private val messageFragment: MessageFragment) :
+        ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return MessageViewModel(messageFragment) as T
+        }
+    }
 
 }
+
+
