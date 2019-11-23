@@ -84,9 +84,9 @@ class DataBaseRepo {
                 return null
             }
 
-            override fun onPostExecute(aVoid: Void) {
-                super.onPostExecute(aVoid)
-            }
+//            override fun onPostExecute(aVoid: Void) {
+//                super.onPostExecute(aVoid)
+//            }
         }
 
         DeleteGroup().execute(group)
@@ -111,11 +111,11 @@ class DataBaseRepo {
         GetUserGroups().execute()
     }
 
-    fun getGroup(id: Long, currentUser: String) {
+    fun getGroup(groupId: Long, currentUser: String) {
 
         class GetGroup : AsyncTask<Void, Void, Groups>() {
             override fun doInBackground(vararg p0: Void?): Groups {
-                return db.getGroup(id, currentUser)
+                return db.getGroup(groupId, currentUser)
             }
 
             override fun onPostExecute(result: Groups) {
@@ -126,6 +126,8 @@ class DataBaseRepo {
         GetGroup().execute()
 
     }
+
+
 
     //---------------- myMessage--------------------
     constructor(context: Context, sendMessageViewModel: SendMessageViewModel) {
@@ -149,12 +151,12 @@ class DataBaseRepo {
     }
 
 
-    fun getMessage(id: String) {
+    fun getMessage(messageId: String) {
 
-        class GetTrip : AsyncTask<String, Void, MyMessage>() {
+        class GetMessage : AsyncTask<String, Void, MyMessage>() {
 
             protected override fun doInBackground(vararg longs: String): MyMessage {
-                return db.getMessage(id, Utils.getCurrentUser())
+                return db.getMessage(messageId, Utils.getCurrentUser())
             }
 
             override fun onPostExecute(myMessage: MyMessage) {
@@ -162,22 +164,19 @@ class DataBaseRepo {
             }
         }
 
-        GetTrip().execute()
+        GetMessage().execute(messageId)
 
     }
 
     fun setMessage(myMessage: MyMessage) {
 
-        class SetTrip : AsyncTask<MyMessage, Void, Long>() {
+        class SetMessage : AsyncTask<MyMessage, Void, Long>() {
 
             override fun doInBackground(vararg myMessages: MyMessage): Long? {
                 return db.insertMessage(myMessage)
             }
-
             override fun onPostExecute(aLong: Long?) {
                 super.onPostExecute(aLong)
-
-                // getTrip(trip.getId());
                 myMessage.smsId = aLong!!
                 sendMessageViewModel.setAlarm(myMessage)
                 Log.d("tripIdForAlarm", " repo onPostExecute: trip id =" + aLong!!)
@@ -186,7 +185,7 @@ class DataBaseRepo {
             }
         }
 
-        SetTrip().execute()
+        SetMessage().execute(myMessage)
 
     }
 
@@ -210,20 +209,20 @@ class DataBaseRepo {
 
     fun updateMessageState(id: String, state: String) {
 
-        class UpdateTripState : AsyncTask<Void, Void, Void>() {
+        class UpdateMessageState : AsyncTask<Void, Void, Void>() {
 
             override fun doInBackground(vararg voids: Void): Void? {
                 db.updateMessageState(id, state)
                 return null
             }
 
-            override fun onPostExecute(aVoid: Void) {
-                super.onPostExecute(aVoid)
-
-            }
+//            override fun onPostExecute(aVoid: Void) {
+//                super.onPostExecute(aVoid)
+//
+//            }
         }
 
-        UpdateTripState().execute()
+        UpdateMessageState().execute()
 
     }
 
@@ -237,18 +236,18 @@ class DataBaseRepo {
                 return null
             }
 
-            override fun onPostExecute(aVoid: Void) {
-                super.onPostExecute(aVoid)
-            }
+//            override fun onPostExecute(aVoid: Void) {
+//                super.onPostExecute(aVoid)
+//            }
         }
 
         DeleteMessage().execute(myMessage)
 
     }
 
-    fun getMessages(mutableLiveData: MutableLiveData<List<MyMessage>>) {
+    fun getPendingMessages(mutableLiveData: MutableLiveData<List<MyMessage>>) {
 
-        class GetTrips : AsyncTask<Void, Void, List<MyMessage>>() {
+        class GetMessage : AsyncTask<Void, Void, List<MyMessage>>() {
 
             override fun doInBackground(vararg avoid: Void): List<MyMessage> {
                 return db.getUserMessages(Utils.getCurrentUser(), "pending")
@@ -257,17 +256,17 @@ class DataBaseRepo {
 
             override fun onPostExecute(myMessages: List<MyMessage>) {
                 super.onPostExecute(myMessages)
-                mutableLiveData.setValue(myMessages)
+                mutableLiveData.value = myMessages
 
             }
         }
 
-        GetTrips().execute()
+        GetMessage().execute()
     }
 
     fun getAllMessages(mutableLiveData: MutableLiveData<List<MyMessage>>) {
 
-        class GetTrips : AsyncTask<Void, Void, List<MyMessage>>() {
+        class GetAllMessages : AsyncTask<Void, Void, List<MyMessage>>() {
 
             override fun doInBackground(vararg avoid: Void): List<MyMessage> {
                 return db.getUserAllMessages(Utils.getCurrentUser())
@@ -275,12 +274,12 @@ class DataBaseRepo {
 
             override fun onPostExecute(myMessages: List<MyMessage>) {
                 super.onPostExecute(myMessages)
-                mutableLiveData.setValue(myMessages)
+                mutableLiveData.value = myMessages
 
             }
         }
 
-        GetTrips().execute()
+        GetAllMessages().execute()
     }
 
 

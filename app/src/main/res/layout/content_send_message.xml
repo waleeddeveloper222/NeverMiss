@@ -106,22 +106,54 @@
         android:text="Send"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_message"
-        app:srcCompat="@android:drawable/ic_menu_send" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_message" />
 
     <TextView
         android:id="@+id/textViewOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:background="@drawable/ic_sim_card"
         android:gravity="center"
-        android:text="1"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/sendMessageButton"
         app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"
         app:layout_constraintTop_toTopOf="@+id/sendMessageButton" />
+
+    <RadioGroup
+        android:id="@+id/predefinedRadioGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sendMessageButton">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="more option to send your Messages" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="To all who have the your sim type " />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="To all who have whatsapp" />
+
+    </RadioGroup>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,7 +22,7 @@ class MessageViewModel : ViewModel {
 
 
     fun getUserMessage(): MutableLiveData<List<MyMessage>> {
-        dataBaseRepo.getMessages(mutableLiveData!!)
+        dataBaseRepo.getPendingMessages(mutableLiveData!!)
         return mutableLiveData!!
     }
 

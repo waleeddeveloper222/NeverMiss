@@ -47,6 +47,8 @@ class AddGroupActivity : AppCompatActivity() {
         textViewPeople.setOnClickListener {
 
             var getContactsIntent = Intent(this, ContactsActivity::class.java)
+            getContactsIntent.putExtra("withGroups", false)
+
             startActivityForResult(getContactsIntent, INTENT_REQUEST)
         }
 
@@ -81,6 +83,7 @@ class AddGroupActivity : AppCompatActivity() {
                             Utils.getCurrentUser(),
                             textInputLayoutGroupName.editText!!.text.toString(),
                             cList
+                            , false
                         )
                     groupViewModel.addGroup(grouping)
 

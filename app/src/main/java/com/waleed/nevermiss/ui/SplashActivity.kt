@@ -4,11 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Settings
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.waleed.nevermiss.R
 import com.waleed.nevermiss.ui.main.MainActivity
+import com.waleed.nevermiss.ui.service.AutoMsgService
 import com.waleed.nevermiss.ui.sign.LoginActivity
+import com.waleed.nevermiss.utils.Utils
+
 
 class SplashActivity : AppCompatActivity() {
 
@@ -20,9 +24,21 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_spalsh)
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         firebaseUser = FirebaseAuth.getInstance().currentUser
 
-        checkUser()
+        if (!Utils.isAccessibilityOn(this, AutoMsgService::class.java)) {
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivity(intent)
+        } else {
+            checkUser()
+        }
+
     }
 
 

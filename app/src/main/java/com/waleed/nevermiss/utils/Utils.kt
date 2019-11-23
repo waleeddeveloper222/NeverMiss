@@ -24,6 +24,13 @@ import android.net.Uri.withAppendedPath
 import android.content.ContentResolver
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
+import android.provider.Settings.Secure
+import android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+import android.text.TextUtils
+import android.provider.Settings.SettingNotFoundException
+import android.provider.Settings.Secure.ACCESSIBILITY_ENABLED
+import android.accessibilityservice.AccessibilityService
+import android.provider.Settings
 
 
 object Utils {
@@ -135,4 +142,40 @@ object Utils {
         return rowContactId
     }
 
+
+    fun isAccessibilityOn(
+        context: Context,
+        clazz: Class<out AccessibilityService>
+    ): Boolean {
+        var accessibilityEnabled = 0
+        val service = context.packageName + "/" + clazz.canonicalName
+        try {
+            accessibilityEnabled = Secure.getInt(
+                context.applicationContext.contentResolver,
+                ACCESSIBILITY_ENABLED
+            )
+        } catch (ignored: SettingNotFoundException) {
+        }
+
+        val colonSplitter = TextUtils.SimpleStringSplitter(':')
+
+        if (accessibilityEnabled == 1) {
+            val settingValue = Secure.getString(
+                context.applicationContext.contentResolver,
+                ENABLED_ACCESSIBILITY_SERVICES
+            )
+            if (settingValue != null) {
+                colonSplitter.setString(settingValue)
+                while (colonSplitter.hasNext()) {
+                    val accessibilityService = colonSplitter.next()
+
+                    if (accessibilityService.equals(service, ignoreCase = true)) {
+                        return true
+                    }
+                }
+            }
+        }
+
+        return false
+    }
 }

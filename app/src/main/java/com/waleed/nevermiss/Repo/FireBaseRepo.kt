@@ -46,7 +46,7 @@ class FireBaseRepo {
                 val uid = firebaseUser.uid
                 val name = firebaseUser.displayName
                 val email = firebaseUser.email
-                val photoUrl = firebaseUser.photoUrl
+//                val photoUrl = firebaseUser.photoUrl
 
 
                 Log.d(TAG, "firebaseUser:uid =  $uid")

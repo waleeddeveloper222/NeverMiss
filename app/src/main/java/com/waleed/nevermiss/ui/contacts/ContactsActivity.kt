@@ -1,6 +1,7 @@
 package com.waleed.nevermiss.ui.contacts
 
 import android.app.Activity
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
@@ -9,9 +10,14 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.waleed.nevermiss.R
+import com.waleed.nevermiss.Repo.Room.DataBaseRepo
 import com.waleed.nevermiss.model.Contact
+import com.waleed.nevermiss.model.Groups
+import com.waleed.nevermiss.ui.fragment.group.GroupAdapter
+import com.waleed.nevermiss.utils.Utils
 import kotlinx.android.synthetic.main.activity_contacts.*
 
 
@@ -20,6 +26,8 @@ class ContactsActivity : AppCompatActivity() {
     lateinit var contactSet: ArrayList<Contact>
     lateinit var setTemp: HashSet<Contact>
     lateinit var contactsAdapter: ContactsAdapter
+    var withGroups: Boolean = false
+    lateinit var groupsAdapter: GroupsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +41,29 @@ class ContactsActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         contactRecyclerView.layoutManager = layoutManager
-
         contactRecyclerView.adapter = contactsAdapter
 
         getContactList()
+
+        withGroups = intent.extras!!.getBoolean("withGroups", false)
+
+        // groups part
+        if (withGroups) {
+            // withGroups = intent.extras!!.getBoolean("withGroups")
+            groupsAdapter = GroupsAdapter()
+            val gLayoutManager = LinearLayoutManager(this)
+            groupRecyclerView.layoutManager = gLayoutManager
+            groupRecyclerView.adapter = groupsAdapter
+            groupRecyclerView.visibility = View.VISIBLE
+            groupsTextView.visibility = View.VISIBLE
+
+            getGroups()
+        } else {
+            // withGroups = false
+            groupRecyclerView.visibility = View.GONE
+            groupsTextView.visibility = View.GONE
+        }
+
 
     }
 
@@ -51,21 +78,52 @@ class ContactsActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_done -> {
 
-                if (contactsAdapter.getSelectedContacts().isNotEmpty()) {
+                var contacts = ArrayList<Contact>()
+                if (withGroups) {
 
-                    intent.putParcelableArrayListExtra(
-                        "contactList",
-                        contactsAdapter.getSelectedContacts() as ArrayList<Parcelable>
+                    if (groupsAdapter.getSelectedContacts().isNotEmpty()) {
+                        contacts.addAll(groupsAdapter.getSelectedContacts())
+                    }
+
+                    if (contactsAdapter.getSelectedContacts().isNotEmpty()) {
+                        contacts.addAll(contactsAdapter.getSelectedContacts())
+                    }
+
+                    if (contacts.isNotEmpty()) {
+                        intent.putParcelableArrayListExtra("contactList", contacts)
+                        setResult(Activity.RESULT_OK, intent)
+                    } else {
+                        setResult(Activity.RESULT_CANCELED, intent)
+
+                    }
+                    finish()
+                    Log.d(
+                        "selectedData",
+                        "selected data = " + contactsAdapter.getSelectedContacts()
                     )
 
-                    setResult(Activity.RESULT_OK, intent)
-                } else {
-                    setResult(Activity.RESULT_CANCELED, intent)
 
+                } else {
+                    if (contactsAdapter.getSelectedContacts().isNotEmpty()) {
+
+                        contacts = contactsAdapter.getSelectedContacts() as ArrayList<Contact>
+
+                        intent.putParcelableArrayListExtra("contactList", contacts)
+
+                        setResult(Activity.RESULT_OK, intent)
+                    } else {
+                        setResult(Activity.RESULT_CANCELED, intent)
+
+                    }
+                    finish()
+                    // contactsAdapter.getSelectedContacts()
+                    Log.d(
+                        "selectedData",
+                        "selected data = " + contactsAdapter.getSelectedContacts()
+                    )
                 }
-                finish()
-                // contactsAdapter.getSelectedContacts()
-                Log.d("selectedData", "selected data = " + contactsAdapter.getSelectedContacts())
+
+
                 true
             }
 
@@ -120,5 +178,27 @@ class ContactsActivity : AppCompatActivity() {
         }
         cur?.close()
     }
+
+
+    private fun getGroups() {
+
+        var dbRepo = DataBaseRepo(this)
+
+        class GetUserGroups : AsyncTask<Void, Void, List<Groups>>() {
+
+            override fun doInBackground(vararg avoid: Void): List<Groups> {
+                return dbRepo.db.getUserGroups(Utils.getCurrentUser())
+            }
+
+            override fun onPostExecute(groups: List<Groups>) {
+                super.onPostExecute(groups)
+                groupsAdapter.setGroupsList(groups)
+
+            }
+        }
+
+        GetUserGroups().execute()
+    }
+
 
 }

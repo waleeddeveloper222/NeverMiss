@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -33,6 +34,7 @@ import java.util.*
 class SendMessageActivity : AppCompatActivity() {
 
     private val MY_PERMISSIONS_REQUEST = 2222
+    var sendOption = "sms"
 
     private var dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
     private var timeFormat = SimpleDateFormat("HH:mm")
@@ -57,9 +59,8 @@ class SendMessageActivity : AppCompatActivity() {
 
         checkPermission()
 
-        sendMessageViewModel =
-            ViewModelProviders.of(this, SendViewModelFactory(this))
-                .get(SendMessageViewModel::class.java!!)
+        sendMessageViewModel = ViewModelProviders.of(this, SendViewModelFactory(this))
+            .get(SendMessageViewModel::class.java!!)
 
         myMessage = MyMessage()
 
@@ -71,11 +72,39 @@ class SendMessageActivity : AppCompatActivity() {
 
         contactLayout.setOnClickListener {
             var getContactsIntent = Intent(this, ContactsActivity::class.java)
+            getContactsIntent.putExtra("withGroups", true)
             startActivityForResult(getContactsIntent, INTENT_REQUEST)
         }
 
         textViewDate.setOnClickListener { messageDate() }
         textViewTime.setOnClickListener { messageTime() }
+
+        //default values
+        sendOption = "sms"
+        myMessage.smsType = "sms"
+        textViewOptions.setBackgroundResource(R.drawable.ic_sim_card)
+
+        textViewOptions.setOnClickListener {
+
+            if (sendOption == "sms") {
+                sendOption = "whatsapp"
+                myMessage.smsType = "whatsapp"
+                textViewOptions.setBackgroundResource(R.drawable.ic_whatsapp)
+            } else if (sendOption == "whatsapp") {
+                sendOption = "auto"
+                // myMessage.smsType = "sms"
+                textViewOptions.setBackgroundResource(R.drawable.ic_auto_sms)
+                predefinedRadioGroup.visibility = View.VISIBLE
+
+            } else if (sendOption == "auto") {
+                predefinedRadioGroup.visibility = View.GONE
+                sendOption = "sms"
+                myMessage.smsType = "sms"
+                textViewOptions.setBackgroundResource(R.drawable.ic_sim_card)
+
+            }
+        }
+
 
 
         sendMessageButton.setOnClickListener {
@@ -83,7 +112,6 @@ class SendMessageActivity : AppCompatActivity() {
             if (isContacts() && isDate() && isTime() && isMessage()) {
                 myMessage.userID = Utils.getCurrentUser()
                 myMessage.smsStatus = "pending"
-                myMessage.smsType = "sms"
                 sendMessageViewModel.saveMessage(myMessage)
             }
         }
@@ -338,16 +366,14 @@ class SendMessageActivity : AppCompatActivity() {
 
     }
 
+    //-----------------
     fun showMessage(s: String) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
         finish()
     }
 
-
     inner class SendViewModelFactory(private val sendMessageActivity: SendMessageActivity) :
         ViewModelProvider.Factory {
-
-
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return SendMessageViewModel(sendMessageActivity) as T
         }

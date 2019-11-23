@@ -1,4 +1,4 @@
-package com.message.messagingmanager.view.receiver
+package com.waleed.nevermiss.utils
 
 import android.annotation.TargetApi
 import android.app.NotificationChannel

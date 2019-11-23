@@ -13,13 +13,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.waleed.nevermiss.R
 import com.waleed.nevermiss.model.Groups
-import com.waleed.nevermiss.ui.addGroup.AddGroupActivity
 
 
 class GroupAdapter(internal var groupFragment: GroupFragment) :
     RecyclerView.Adapter<GroupAdapter.GroupViewHolder>() {
 
-    internal var groupList: List<Groups>? = ArrayList<Groups>()
+    internal var groupList: List<Groups>? = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val view =
