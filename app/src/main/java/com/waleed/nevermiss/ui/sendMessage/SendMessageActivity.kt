@@ -110,9 +110,37 @@ class SendMessageActivity : AppCompatActivity() {
         sendMessageButton.setOnClickListener {
 
             if (isContacts() && isDate() && isTime() && isMessage()) {
-                myMessage.userID = Utils.getCurrentUser()
-                myMessage.smsStatus = "pending"
-                sendMessageViewModel.saveMessage(myMessage)
+
+
+                if (sendOption == "auto") {
+
+                    if (predefinedRadioGroup.checkedRadioButtonId != -1) {
+
+                        var selectedId = predefinedRadioGroup.checkedRadioButtonId
+
+                        when (selectedId) {
+                            R.id.autoSim -> {
+                                myMessage.smsType = "autoSim"
+                                Log.d("predefinedRadioGroup", "myMessage.smsType = autoSim")
+                            }
+
+                            R.id.autoWhatsApp -> {
+                                myMessage.smsType = "autoWhats"
+                                Log.d("predefinedRadioGroup", "myMessage.smsType = autoWhats")
+
+                            }
+                        }
+
+                        myMessage.userID = Utils.getCurrentUser()
+                        myMessage.smsStatus = "pending"
+                        sendMessageViewModel.saveMessage(myMessage)
+
+                    } else {
+                        Toast.makeText(this, "select one option", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
             }
         }
 

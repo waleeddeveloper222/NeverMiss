@@ -140,6 +140,7 @@
             android:text="more option to send your Messages" />
 
         <RadioButton
+            android:id="@+id/autoSim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -147,6 +148,7 @@
             android:text="To all who have the your sim type " />
 
         <RadioButton
+            android:id="@+id/autoWhatsApp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"

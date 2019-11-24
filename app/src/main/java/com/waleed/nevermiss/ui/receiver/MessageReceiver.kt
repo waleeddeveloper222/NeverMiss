@@ -8,7 +8,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.telephony.SmsManager
+import android.telephony.TelephonyManager
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.waleed.nevermiss.Repo.Room.DataBaseRepo
 import com.waleed.nevermiss.model.MyMessage
 import com.waleed.nevermiss.ui.service.AutoMsgService
@@ -36,9 +39,8 @@ class MessageReceiver : BroadcastReceiver() {
 
 
 
-        if (myMessage.smsType == "sms") {
-
-            for (con in myMessage.contacts) {
+        when {
+            myMessage.smsType == "sms" -> for (con in myMessage.contacts) {
                 val smsManager: SmsManager = SmsManager.getDefault()
                 smsManager.sendTextMessage(
                     con.number,
@@ -48,28 +50,134 @@ class MessageReceiver : BroadcastReceiver() {
                     deliveredPendingIntent
                 )
             }
-        } else if (myMessage.smsType == "whatsapp") {
 
-            for (con in myMessage.contacts) {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(
-                        "https://api.whatsapp.com/send?phone=" + con.number.replace(
-                            "+",
-                            ""
-                        ) + "&text=" + myMessage.smsMsg
+            myMessage.smsType == "whatsapp" -> {
+
+                for (con in myMessage.contacts) {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(
+                            "https://api.whatsapp.com/send?phone=" + con.number.replace(
+                                "+",
+                                ""
+                            ) + "&text=" + myMessage.smsMsg
+                        )
                     )
-                )
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(intent)
-                context.startService(Intent(context, AutoMsgService::class.java))
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                    context.startService(Intent(context, AutoMsgService::class.java))
+                }
+
+                updateMsg("Completed", "Sent")
+                showNotification(context, "message sent")
+
             }
 
-            updateMsg("Completed", "Sent")
-            showNotification(context, "message sent")
+            myMessage.smsType == "autoWhats" -> {
+                Log.d("predefinedRadioGroup", "Receiver myMessage.smsType = autoWhats")
+
+                for (con in myMessage.contacts) {
+
+                    if (con.hasWhat) {
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(
+                                "https://api.whatsapp.com/send?phone=" + con.number.replace(
+                                    "+",
+                                    ""
+                                ) + "&text=" + myMessage.smsMsg
+                            )
+                        )
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(intent)
+                        context.startService(Intent(context, AutoMsgService::class.java))
+                    } else {
+                        val smsManager: SmsManager = SmsManager.getDefault()
+                        smsManager.sendTextMessage(
+                            con.number,
+                            null,
+                            myMessage.smsMsg,
+                            sentPendingIntent,
+                            deliveredPendingIntent
+                        )
+                    }
+
+                }
+            }
+
+            myMessage.smsType == "autoSim" -> {
+                Log.d("predefinedRadioGroup", "Receiver myMessage.smsType = autoSim")
+
+                var simNetWork = getPhoneNetwork(context)
+
+
+                for (con in myMessage.contacts) {
+                    var subNum: String = ""
+                    var network: String = ""
+                    if (con.number.contains("+2")) {
+
+                        var num = con.number.substring(0, 5);
+
+                    } else {
+                        var num = con.number.substring(0, 3);
+                    }
+
+                    when {
+                        subNum.contains("010") -> {
+                            network = "vodafone"
+                        }
+                        subNum.contains("011") -> {
+                            network = "etisalat"
+
+                        }
+                        subNum.contains("012") -> {
+                            network = "orange"
+
+                        }
+                        subNum.contains("015") -> {
+                            network = "we"
+
+                        }
+                        else -> {
+                            network = "non"
+                        }
+                    }
+
+
+
+                    if (simNetWork == network) {
+
+                        val smsManager: SmsManager = SmsManager.getDefault()
+                        smsManager.sendTextMessage(
+                            con.number,
+                            null,
+                            myMessage.smsMsg,
+                            sentPendingIntent,
+                            deliveredPendingIntent
+                        )
+                    } else {
+
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(
+                                "https://api.whatsapp.com/send?phone=" + con.number.replace(
+                                    "+",
+                                    ""
+                                ) + "&text=" + myMessage.smsMsg
+                            )
+                        )
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(intent)
+                        context.startService(Intent(context, AutoMsgService::class.java))
+                    }
+                }
+
+                updateMsg("Completed", "Sent")
+                showNotification(context, "message sent")
+
+            }
+
         }
-
-
 
 
         smsSentReceiver = object : BroadcastReceiver() {
@@ -113,7 +221,8 @@ class MessageReceiver : BroadcastReceiver() {
                         showNotification(context, "message delivered")
                     }
                     Activity.RESULT_CANCELED -> {
-                        Toast.makeText(context, "message not delivered", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "message not delivered", Toast.LENGTH_SHORT)
+                            .show()
                         updateMsg("Not", "Not Delivered")
                         showNotification(context, "message not delivered")
                     }
@@ -121,7 +230,10 @@ class MessageReceiver : BroadcastReceiver() {
             }
         }
 
-        context?.applicationContext?.registerReceiver(smsSentReceiver, IntentFilter("message sent"))
+        context?.applicationContext?.registerReceiver(
+            smsSentReceiver,
+            IntentFilter("message sent")
+        )
         context?.applicationContext?.registerReceiver(
             smsDeliveredReceiver,
             IntentFilter("message delivered")
@@ -146,4 +258,15 @@ class MessageReceiver : BroadcastReceiver() {
     }
 
 
+    private fun getPhoneNetwork(context: Context): String {
+        val phoneMgr =
+            context.getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
+        Log.d("predefinedRadioGroup", "SIM OPERATOR NAME :-" + phoneMgr.simOperatorName)
+
+        return phoneMgr.simOperatorName
+    }
+
+    fun String.substring(startIndex: Int, endIndex: Int): String {
+        return ""
+    }
 }

@@ -1,5 +1,6 @@
 package com.waleed.nevermiss.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,10 @@ import com.waleed.nevermiss.ui.main.MainActivity
 import com.waleed.nevermiss.ui.service.AutoMsgService
 import com.waleed.nevermiss.ui.sign.LoginActivity
 import com.waleed.nevermiss.utils.Utils
+import android.telephony.TelephonyManager
+import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 
 class SplashActivity : AppCompatActivity() {
@@ -24,8 +29,8 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_spalsh)
 
-
     }
+
 
     override fun onResume() {
         super.onResume()
